@@ -18,8 +18,8 @@ def y : Expr := Expr.var "y"
 #guard Expr.simplify (x * 0) == 0
 #guard Expr.simplify (x * 1) == x
 
-#guard Expr.simplify (x ^ Expr.int 0) == 1
-#guard Expr.simplify (x ^ Expr.int 1) == x
+#guard Expr.simplify (x ^ Expr.rat 0) == 1
+#guard Expr.simplify (x ^ Expr.rat 1) == x
 
 #guard Expr.simplify (x ^ 0) == 1
 #guard Expr.simplify (x ^ 1) == x
