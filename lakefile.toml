@@ -1,0 +1,10 @@
+name = "symbolism"
+version = "0.1.0"
+defaultTargets = ["symbolism"]
+
+[[lean_lib]]
+name = "Symbolism"
+
+[[lean_exe]]
+name = "symbolism"
+root = "Main"
