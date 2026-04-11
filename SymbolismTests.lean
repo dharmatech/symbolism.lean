@@ -24,4 +24,17 @@ def y : Expr := Expr.var "y"
 #guard Expr.simplify (x ^ 0) == 1
 #guard Expr.simplify (x ^ 1) == x
 
+
+-- #eval Expr.simplify (3 + x + 7)
+
+#guard Expr.simplify (3 + x + 7) == 10 + x
+
+-- #eval Expr.simplify (3 * x * 7)
+
+#guard Expr.simplify (3 * x * 7) == 21 * x
+
+-- #eval Expr.simplify ((3 + x) + (7 + y))
+
+#guard Expr.simplify ((3 + x) + (7 + y)) == 10 + x + y
+
 end SymbolismTests
