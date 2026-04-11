@@ -1,9 +1,13 @@
 name = "symbolism"
 version = "0.1.0"
 defaultTargets = ["symbolism"]
+testDriver = "SymbolismTests"
 
 [[lean_lib]]
 name = "Symbolism"
+
+[[lean_lib]]
+name = "SymbolismTests"
 
 [[lean_exe]]
 name = "symbolism"
