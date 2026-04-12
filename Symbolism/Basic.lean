@@ -130,24 +130,6 @@ def sort_factor_powers (items : List (Expr × Rat)) : List (Expr × Rat) :=
 def factor_expr (base : Expr) (exp : Rat) : Expr :=
   mk_pow base (.rat exp)
 
--- def normalize_mul_factors (factors : List Expr) : List Expr :=
---   if factors.any (fun e => e == .rat 0) then
---     [.rat 0]
---   else
---     let const := factors.foldl (fun acc e =>
---       match e with
---       | .rat q => acc * q
---       | _ => acc) 1
---     let rest := factors.filterMap (fun e =>
---       match e with
---       | .rat _ => none
---       | _ => some e)
---     let combined := (combine_factors rest).map (fun (base, exp) => factor_expr base exp)
---     if const == 1 then
---       combined
---     else
---       .rat const :: combined
-
 def normalize_mul_factors (factors : List Expr) : List Expr :=
   if factors.any (fun e => e == .rat 0) then
     [.rat 0]
@@ -198,7 +180,6 @@ def combine_terms (terms : List Expr) : List (Rat × Expr) :=
     let (coeff, term) := coeff_term e
     insert_term coeff term acc) []
 
-
 def term_le (a b : Rat × Expr) : Bool :=
   expr_le a.2 b.2
 
@@ -213,16 +194,9 @@ def term_expr (coeff : Rat) (term : Expr) : Expr :=
   else
     normalize_product (.mul (.rat coeff) term)
 
--- def normalize_add_terms (terms : List Expr) : List Expr :=
---   (combine_terms terms).map (fun (coeff, term) => term_expr coeff term)
-
 def normalize_add_terms (terms : List Expr) : List Expr :=
   (sort_terms (combine_terms terms)).map
     (fun (coeff, term) => term_expr coeff term)
-
-
-
-
 
 def mk_add (a b : Expr) : Expr :=
   from_add_terms (normalize_add_terms (add_terms a ++ add_terms b))
