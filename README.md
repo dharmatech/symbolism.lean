@@ -20,3 +20,5 @@ def y : Expr := Expr.var "y"
 
 #guard Expr.simplify ((2 * x * y) + (3 * x * y)) == 5 * x * y
 ```
+
+The [current simplifier](Symbolism\Basic.lean) is less than 215 lines long.
