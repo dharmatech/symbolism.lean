@@ -24,6 +24,12 @@ def sub (a b : Expr) : Expr := .add a (neg b)
 
 def div (a b : Expr) : Expr := .mul a (.pow b (.rat (-1)))
 
+instance : Neg Expr where neg := Expr.neg
+
+instance : Sub Expr where sub := Expr.sub
+
+instance : Div Expr where div := Expr.div
+
 def add_terms : Expr → List Expr
   | .add a b => add_terms a ++ add_terms b
   | e => [e]

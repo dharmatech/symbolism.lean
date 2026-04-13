@@ -61,9 +61,18 @@ def y : Expr := Expr.var "y"
 
 #guard Expr.simplify (2 * y * x + 3 * x * y) == 5 * x * y
 
+#guard Expr.simplify (-x) == Expr.mul (Expr.rat (-1)) x
 
+#guard Expr.simplify (x - y) == x + Expr.mul (Expr.rat (-1)) y
 
--- #eval Expr.simplify (x * (x ^ (Expr.rat (-1))))
+#guard Expr.simplify (x - x) == 0
 
+#guard Expr.simplify ((x - y) + y) == x
+
+#guard Expr.simplify (x / y) == x * (y ^ Expr.rat (-1))
+
+#guard Expr.simplify (x / x) == 1
+
+#guard Expr.simplify (x * (x ^ Expr.rat (-1))) == 1
 
 end SymbolismTests
