@@ -75,4 +75,29 @@ def y : Expr := Expr.var "y"
 
 #guard Expr.simplify (x * (x ^ Expr.rat (-1))) == 1
 
+#guard Expr.simplify ((x ^ 2) ^ 3) == x ^ 6
+
+#guard
+  Expr.simplify ((x ^ 2) ^ Expr.rat (1 / 2))
+    == (x ^ 2) ^ Expr.rat (1 / 2)
+
+#guard Expr.simplify ((x * y) ^ 2) == (x ^ 2) * (y ^ 2)
+
+#guard Expr.simplify ((2 * x) ^ 3) == 8 * (x ^ 3)
+
+#guard
+  Expr.simplify ((x * y) ^ Expr.rat (-1))
+    == (x ^ Expr.rat (-1)) * (y ^ Expr.rat (-1))
+
+#guard
+  Expr.simplify ((x * y) ^ Expr.rat (1 / 2))
+    == (x * y) ^ Expr.rat (1 / 2)
+
+#guard Expr.simplify (((x * y) ^ 2) ^ 3) == (x ^ 6) * (y ^ 6)
+
+#guard
+  Expr.simplify ((2 * x * y) ^ Expr.rat (-2))
+    == Expr.rat (1 / 4) * (x ^ Expr.rat (-2)) * (y ^ Expr.rat (-2))
+
+
 end SymbolismTests

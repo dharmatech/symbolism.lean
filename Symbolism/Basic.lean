@@ -92,6 +92,22 @@ def insert_sorted_by {α : Type} (le : α → α → Bool) (x : α) : List α �
 def sort_by {α : Type} (le : α → α → Bool) (xs : List α) : List α :=
   xs.foldr (insert_sorted_by le) []
 
+-- def mk_pow (a b : Expr) : Expr :=
+--   match a, b with
+--   |      _, .rat 0 => .rat 1
+--   |      e, .rat 1 =>      e
+--   | .rat m, .rat n =>
+--     if n.isInt then
+--       if n >= 0 then
+--         .rat (m ^ n.num.natAbs)
+--       else if m == 0 then
+--         .pow (.rat m) (.rat n)
+--       else
+--         .rat (1 / (m ^ n.num.natAbs))
+--     else
+--       .pow (.rat m) (.rat n)
+--   | _, _ => .pow a b
+
 def mk_pow (a b : Expr) : Expr :=
   match a, b with
   |      _, .rat 0 => .rat 1
@@ -104,8 +120,13 @@ def mk_pow (a b : Expr) : Expr :=
         .pow (.rat m) (.rat n)
       else
         .rat (1 / (m ^ n.num.natAbs))
-    else
-      .pow (.rat m) (.rat n)
+      else
+        .pow (.rat m) (.rat n)
+  | .pow base (.rat inner), .rat outer =>
+      if outer.isInt then
+        mk_pow base (.rat (inner * outer))
+      else
+        .pow (.pow base (.rat inner)) (.rat outer)
   | _, _ => .pow a b
 
 def base_exp : Expr → Expr × Rat
@@ -210,11 +231,28 @@ def mk_add (a b : Expr) : Expr :=
 def mk_mul (a b : Expr) : Expr :=
   normalize_product (.mul a b)
 
+
+def pow_product_factors (factors : List Expr) (exp : Rat) : Expr :=
+  normalize_product
+    (from_mul_factors (factors.map (fun factor => mk_pow factor (.rat exp))))
+
+
+def simplify_pow (a b : Expr) : Expr :=
+  match a, b with
+  | .mul _ _, .rat n =>
+      if n.isInt then
+        pow_product_factors (mul_factors a) n
+      else
+        mk_pow a b
+  | _, _ => mk_pow a b
+
+
+
 def simplify : Expr -> Expr
   | .rat n => .rat n
   | .var x => .var x
-  | .add a b => mk_add (simplify a) (simplify b)
-  | .mul a b => mk_mul (simplify a) (simplify b)
-  | .pow a b => mk_pow (simplify a) (simplify b)
+  | .add a b => mk_add       (simplify a) (simplify b)
+  | .mul a b => mk_mul       (simplify a) (simplify b)
+  | .pow a b => simplify_pow (simplify a) (simplify b)
 
 end Expr
